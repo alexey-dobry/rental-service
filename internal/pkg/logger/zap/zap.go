@@ -21,13 +21,13 @@ type zapLogger struct {
 }
 
 func NewLogger(cfg Config) logger.Logger {
-	os.MkdirAll(cfg.Dir, os.ModePerm)
-
 	logDirPath := "./logs"
 
 	if cfg.Dir != "" {
 		logDirPath = cfg.Dir
 	}
+
+	os.MkdirAll(logDirPath, os.ModePerm)
 
 	logFile, err := os.OpenFile(filepath.Join(logDirPath, "main.log"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
 	if err != nil {
