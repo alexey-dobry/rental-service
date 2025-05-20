@@ -11,9 +11,9 @@ import (
 )
 
 type Config struct {
-	Dir         string `yaml:"dir"`
-	Debug       bool   `yaml:"is_debug"`
-	Development bool   `yaml:"is_development"`
+	Dir        string `yaml:"dir"`
+	Debug      bool   `yaml:"is_debug"`
+	Production bool   `yaml:"is_production"`
 }
 
 type zapLogger struct {
@@ -23,16 +23,22 @@ type zapLogger struct {
 func NewLogger(cfg Config) logger.Logger {
 	os.MkdirAll(cfg.Dir, os.ModePerm)
 
-	logFile, err := os.OpenFile(filepath.Join(cfg.Dir, "main.log"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
+	logDirPath := "./logs"
+
+	if cfg.Dir != "" {
+		logDirPath = cfg.Dir
+	}
+
+	logFile, err := os.OpenFile(filepath.Join(logDirPath, "main.log"), os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0600)
 	if err != nil {
 		log.Fatalf("Failed to create log file(%s): %s", logFile.Name(), err)
 	}
 
 	var zcfg zapcore.EncoderConfig
-	if cfg.Development {
-		zcfg = zap.NewDevelopmentEncoderConfig()
-	} else {
+	if cfg.Production {
 		zcfg = zap.NewProductionEncoderConfig()
+	} else {
+		zcfg = zap.NewDevelopmentEncoderConfig()
 	}
 
 	zcfg.EncodeTime = zapcore.ISO8601TimeEncoder
