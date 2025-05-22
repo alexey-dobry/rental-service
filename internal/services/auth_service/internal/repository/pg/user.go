@@ -1,0 +1,29 @@
+package pg
+
+import (
+	"github.com/alexey-dobry/rental-service/internal/services/auth_service/internal/domain/model"
+	"github.com/alexey-dobry/rental-service/internal/services/auth_service/internal/repository"
+	"github.com/google/uuid"
+)
+
+func (ur *UserRepository) Add(userData model.User) error {
+	return ur.db.Create(userData).Error
+}
+
+func (ur *UserRepository) GetOne(userId uuid.UUID) (model.User, error) {
+	user := model.User{}
+
+	result := ur.db.Select("email", "password", "role").Where("id = ?", userId.String()).Find(&user)
+	if result.Error != nil {
+		return model.User{}, result.Error
+	}
+	return user, nil
+}
+
+func (ur *UserRepository) UpdateUser(userId uuid.UUID, newData repository.UpdateUserParams) error {
+	return ur.db.Model(model.User{}).Where("id = ?", userId.String()).Update("password", newData.NewPassword).Error
+}
+
+func (ur *UserRepository) Delete(userId uuid.UUID) error {
+	return ur.db.Where("id = ?", userId.String()).Delete(&model.User{}).Error
+}
