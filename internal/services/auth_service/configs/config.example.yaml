@@ -14,4 +14,10 @@ store:
   password: superpass
   database: postgres
 
-jwt-secret: <very-secret-secret>
+access-jwt:
+  secret: <very-secret-secret>
+  ttl: "7:00:00"
+
+refresh-jwt:
+  secret: <so-very-secret-secret>
+  ttl: "7:00:00"

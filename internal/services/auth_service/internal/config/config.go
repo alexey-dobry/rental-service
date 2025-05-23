@@ -8,6 +8,7 @@ import (
 	"github.com/alexey-dobry/rental-service/internal/pkg/logger"
 	"github.com/alexey-dobry/rental-service/internal/pkg/logger/zap"
 	"github.com/alexey-dobry/rental-service/internal/pkg/validator"
+	"github.com/alexey-dobry/rental-service/internal/services/auth_service/internal/domain/jwt"
 	"github.com/alexey-dobry/rental-service/internal/services/auth_service/internal/repository/pg"
 	"github.com/alexey-dobry/rental-service/internal/services/auth_service/internal/server/grpc"
 	"github.com/ilyakaznacheev/cleanenv"
@@ -17,7 +18,7 @@ type Config struct {
 	Logger     zap.Config  `yaml:"logger"`
 	gRPC       grpc.Config `yaml:"grpc"`
 	Repository pg.Config   `yaml:"repository"`
-	JWTSecret  string      `yaml:"jwt-secret"`
+	JWT        jwt.Config  `yaml:"jwt"`
 }
 
 func MustLoad() Config {
