@@ -4,43 +4,64 @@ package auth;
 
 option go_package = "github.com/alexey-dobry/rental-service/internal/pkg/gen/auth";
 
+import "google/protobuf/empty.proto";
+
+enum Role {
+  USER = 0;
+  MANAGER = 1;
+}
+
+enum Authenticity {
+  AUTHENTICATED = 0;
+  UNAUTHENTICATED = 1;
+}
+
 service Auth {
   rpc Register (RegisterRequest) returns (RegisterResponse);
-  rpc Auth (AuthRequest) returns (AuthResponse);
-  rpc CreateProfile (CreateProfileRequest) returns (CreateProfileResponse);
-  rpc IsValid (IsValidRequest) returns (IsValidResponse);
+  rpc Login (LoginRequest) returns (LoginResponse);
+  rpc Auth (AuthRequest) returns (google.protobuf.Empty);
+  rpc CreateProfile (CreateProfileRequest) returns (google.protobuf.Empty);
+  rpc RefreshToken (RefreshTokenRequest) returns (RefreshTokenResponse);
 }
 
 message RegisterRequest {
-  string email = 1;
-  string password = 2;
+  string first_name = 1;
+  string last_name = 2;
+  Role role = 3;
+  string email = 4;
+  string password = 5;
 }
 
 message RegisterResponse {
-  string jwt_token = 1;
+  string jwt_access_token = 1;
+  string jwt_refresh_token = 2;
 }
 
-message AuthRequest {
+message LoginRequest {
   string email = 1;
   string password = 2;
 }
 
-message AuthResponse {
-  string jwt_token = 1;
+message LoginResponse {
+  string jwt_access_token = 1;
+  string jwt_refresh_token = 2;
 }
 
-message IsValidRequest {
-  string jwt_token = 1;
-}
-
-message IsValidResponse {
-  bool is_jwt_valid = 1;
+message AuthRequest {
+  string jwt_access_token = 1;
 }
 
 message CreateProfileRequest {
-  string user_id = 1;
+  string first_name = 1;
+  string last_name = 2;
+  Role role = 3;
+  string email = 4;
 }
 
-message CreateProfileResponse {
-  bool result = 1;
+message RefreshTokenRequest {
+  string token = 1;
+}
+
+message RefreshTokenResponse {
+  string token = 1;
 }
