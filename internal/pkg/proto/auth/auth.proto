@@ -20,7 +20,6 @@ service Auth {
   rpc Register (RegisterRequest) returns (RegisterResponse);
   rpc Login (LoginRequest) returns (LoginResponse);
   rpc Auth (AuthRequest) returns (google.protobuf.Empty);
-  rpc CreateProfile (CreateProfileRequest) returns (google.protobuf.Empty);
   rpc RefreshToken (RefreshTokenRequest) returns (RefreshTokenResponse);
 }
 
@@ -49,13 +48,6 @@ message LoginResponse {
 
 message AuthRequest {
   string jwt_access_token = 1;
-}
-
-message CreateProfileRequest {
-  string first_name = 1;
-  string last_name = 2;
-  Role role = 3;
-  string email = 4;
 }
 
 message RefreshTokenRequest {

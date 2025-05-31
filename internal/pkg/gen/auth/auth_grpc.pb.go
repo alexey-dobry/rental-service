@@ -20,11 +20,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Auth_Register_FullMethodName      = "/auth.Auth/Register"
-	Auth_Login_FullMethodName         = "/auth.Auth/Login"
-	Auth_Auth_FullMethodName          = "/auth.Auth/Auth"
-	Auth_CreateProfile_FullMethodName = "/auth.Auth/CreateProfile"
-	Auth_RefreshToken_FullMethodName  = "/auth.Auth/RefreshToken"
+	Auth_Register_FullMethodName     = "/auth.Auth/Register"
+	Auth_Login_FullMethodName        = "/auth.Auth/Login"
+	Auth_Auth_FullMethodName         = "/auth.Auth/Auth"
+	Auth_RefreshToken_FullMethodName = "/auth.Auth/RefreshToken"
 )
 
 // AuthClient is the client API for Auth service.
@@ -34,7 +33,6 @@ type AuthClient interface {
 	Register(ctx context.Context, in *RegisterRequest, opts ...grpc.CallOption) (*RegisterResponse, error)
 	Login(ctx context.Context, in *LoginRequest, opts ...grpc.CallOption) (*LoginResponse, error)
 	Auth(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	CreateProfile(ctx context.Context, in *CreateProfileRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*RefreshTokenResponse, error)
 }
 
@@ -76,16 +74,6 @@ func (c *authClient) Auth(ctx context.Context, in *AuthRequest, opts ...grpc.Cal
 	return out, nil
 }
 
-func (c *authClient) CreateProfile(ctx context.Context, in *CreateProfileRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(emptypb.Empty)
-	err := c.cc.Invoke(ctx, Auth_CreateProfile_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *authClient) RefreshToken(ctx context.Context, in *RefreshTokenRequest, opts ...grpc.CallOption) (*RefreshTokenResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(RefreshTokenResponse)
@@ -103,7 +91,6 @@ type AuthServer interface {
 	Register(context.Context, *RegisterRequest) (*RegisterResponse, error)
 	Login(context.Context, *LoginRequest) (*LoginResponse, error)
 	Auth(context.Context, *AuthRequest) (*emptypb.Empty, error)
-	CreateProfile(context.Context, *CreateProfileRequest) (*emptypb.Empty, error)
 	RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenResponse, error)
 	mustEmbedUnimplementedAuthServer()
 }
@@ -123,9 +110,6 @@ func (UnimplementedAuthServer) Login(context.Context, *LoginRequest) (*LoginResp
 }
 func (UnimplementedAuthServer) Auth(context.Context, *AuthRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Auth not implemented")
-}
-func (UnimplementedAuthServer) CreateProfile(context.Context, *CreateProfileRequest) (*emptypb.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateProfile not implemented")
 }
 func (UnimplementedAuthServer) RefreshToken(context.Context, *RefreshTokenRequest) (*RefreshTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RefreshToken not implemented")
@@ -205,24 +189,6 @@ func _Auth_Auth_Handler(srv interface{}, ctx context.Context, dec func(interface
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Auth_CreateProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CreateProfileRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AuthServer).CreateProfile(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Auth_CreateProfile_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServer).CreateProfile(ctx, req.(*CreateProfileRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Auth_RefreshToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RefreshTokenRequest)
 	if err := dec(in); err != nil {
@@ -259,10 +225,6 @@ var Auth_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Auth",
 			Handler:    _Auth_Auth_Handler,
-		},
-		{
-			MethodName: "CreateProfile",
-			Handler:    _Auth_CreateProfile_Handler,
 		},
 		{
 			MethodName: "RefreshToken",
