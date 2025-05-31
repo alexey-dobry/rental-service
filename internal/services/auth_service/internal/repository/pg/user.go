@@ -10,10 +10,10 @@ func (ur *UserRepository) Add(userData model.User) error {
 	return ur.db.Create(userData).Error
 }
 
-func (ur *UserRepository) GetOne(userId uuid.UUID) (model.User, error) {
+func (ur *UserRepository) GetOne(email string) (model.User, error) {
 	user := model.User{}
 
-	result := ur.db.Select("email", "password", "role").Where("id = ?", userId.String()).Find(&user)
+	result := ur.db.Select("password", "role", "id", "first_name", "last_name").Where("email = ?", email).Find(&user)
 	if result.Error != nil {
 		return model.User{}, result.Error
 	}

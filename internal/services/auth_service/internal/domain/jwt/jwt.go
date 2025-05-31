@@ -18,8 +18,6 @@ const (
 type JWTHandler interface {
 	ExpiresAt() TTL
 
-	GenerateJWT(claims Claims, jwtType TokenType) (string, error)
-
 	GenerateJWTPair(claims Claims) (refreshToken, accessToken string, err error)
 
 	ValidateJWT(token string, jwtType TokenType) (Claims, error)

@@ -8,7 +8,7 @@ import (
 type UserRepository interface {
 	Add(model.User) error
 
-	GetOne(userId uuid.UUID) (model.User, error)
+	GetOne(email string) (model.User, error)
 
 	UpdateUser(userId uuid.UUID, newData UpdateUserParams) error
 

@@ -7,7 +7,7 @@ import (
 
 	"github.com/alexey-dobry/rental-service/internal/pkg/logger"
 	"github.com/alexey-dobry/rental-service/internal/pkg/logger/zap"
-	"github.com/alexey-dobry/rental-service/internal/pkg/validator"
+	validator "github.com/alexey-dobry/rental-service/internal/pkg/validation"
 	"github.com/alexey-dobry/rental-service/internal/services/auth_service/internal/domain/jwt"
 	"github.com/alexey-dobry/rental-service/internal/services/auth_service/internal/repository/pg"
 	"github.com/alexey-dobry/rental-service/internal/services/auth_service/internal/server/grpc"
@@ -22,7 +22,7 @@ type Config struct {
 }
 
 func MustLoad() Config {
-	logger := zap.NewLogger(zap.Config{}).WithFields().WithFields("layer", "config")
+	logger := zap.NewLogger(zap.Config{}).WithFields("layer", "config")
 	var cfg Config
 	configPath := ParseFlag(cfg, &logger)
 

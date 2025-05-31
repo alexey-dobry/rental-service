@@ -2,12 +2,11 @@ module github.com/alexey-dobry/rental-service/internal/services/auth_service
 
 go 1.24.0
 
-require github.com/alexey-dobry/rental-service/internal/pkg v0.0.0-20250524153409-63de4a5b61fa
-require github.com/alexey-dobry/rental-service/internal/pkg/validation v0.0.0-20250524153409-63de4a5b61fa
-
+replace github.com/alexey-dobry/rental-service/internal/pkg => ../../pkg
 
 require (
 	github.com/BurntSushi/toml v1.5.0 // indirect
+	github.com/alexey-dobry/rental-service/internal/pkg v0.0.0-20250524153409-63de4a5b61fa // indirect
 	github.com/gabriel-vasile/mimetype v1.4.8 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
